@@ -1,35 +1,15 @@
-/*
-===========================================================================
-  OOP Assignment 02 - PakWheels Clone
-  National University of Computer & Emerging Sciences, Karachi
-  Subject: Object-Oriented Programming | Spring 2026
-
-===========================================================================
-*/
-
 #include <iostream>
 #include <string>
 using namespace std;
-
-
-// FORWARD DECLARATIONS
 
 class Listing;
 class User;
 class Buyer;
 
-// ====================================================================
-// SECTION 3: ABSTRACT BASE CLASSES  (Abstraction — 4 interfaces)
-// ====================================================================
 #include "IDisplayable.h"
 #include "ISearchable.h"
 #include "IApprovable.h"
 #include "IReportable.h"
-
-
-// ====================================================================
-// HELPER CLASSES
-// ====================================================================
 
 class Address {
 private:
@@ -199,10 +179,6 @@ public:
     friend VehicleFeatures mergeFeatures(const VehicleFeatures& a, const VehicleFeatures& b);
 };
 
-// ====================================================================
-// SECTION 1 & 2: VEHICLE HIERARCHY (Inheritance + Polymorphism)
-// ====================================================================
-
 class Vehicle {
 protected:
     string brand, model, transmission, fuelType;
@@ -260,7 +236,7 @@ public:
 };
 
 
-// Inheritance Relationship #1: Car IS-A Vehicle
+// Inheritance: Car IS-A Vehicle
 class Car : public Vehicle {
 private:
     int    numDoors;
@@ -286,7 +262,7 @@ public:
 };
 
 
-// Inheritance Relationship #2: Bike IS-A Vehicle
+// Inheritance: Bike IS-A Vehicle
 class Bike : public Vehicle {
 private:
     string bikeType;
@@ -339,11 +315,6 @@ public:
     string getVehicleType() const override { return "ElectricCar"; }
 };
 
-
-// ====================================================================
-// LISTING CLASS — stores vehicle info by value (safe copying)
-// Implements ISearchable (abstraction)
-// ====================================================================
 class Listing : public ISearchable {
 private:
     int             listingID;
@@ -516,30 +487,26 @@ public:
 };
 int Listing::totalListings = 0;
 
-
-// ====================================================================
 // FRIEND FUNCTION #1: compareListing
 // Accesses private price and listingID directly
 // Justification: External price-comparison utility that operates on two
 //   Listing objects without belonging to either; friendship lets it
 //   read private price without needing a public getter for every field.
-// ====================================================================
+
 bool compareListing(const Listing& a, const Listing& b) {
     cout << "  [Friend] Listing #" << a.listingID << " (PKR " << a.price
          << ")  vs  Listing #" << b.listingID << " (PKR " << b.price << ")" << endl;
     return a.price < b.price;   // true = a is cheaper
 }
 
-// ====================================================================
 // FRIEND FUNCTION #2: mergeFeatures
 // Accesses private VehicleFeatures of both Listings
 // Justification: A comparison-page feature that builds a union feature
 //   set from two listings needs their private features field directly.
-// ====================================================================
+
 VehicleFeatures mergeFeatures(const Listing& a, const Listing& b) {
     return a.features + b.features;   // uses VehicleFeatures::operator+
 }
-
 
 // ====================================================================
 // SECTION 1: USER HIERARCHY (Inheritance + Polymorphism + Abstraction)
@@ -601,7 +568,6 @@ public:
     friend double combineBudget(const Buyer& a, const Buyer& b); // #4
 };
 int User::totalUsers = 0;
-
 // ====================================================================
 // FRIEND FUNCTION #3: printUserContact
 // Reads private ContactInfo of a User object
@@ -613,8 +579,6 @@ void printUserContact(const User& u) {
          << " | Phone: " << u.contact.getPhone()
          << " | Email: " << u.contact.getEmail() << endl;
 }
-
-
 // ====================================================================
 // Derived User Class 1: Buyer (Inheritance Relationship #4)
 // ====================================================================
@@ -836,10 +800,6 @@ public:
     }
 };
 
-
-// ====================================================================
-// MARKETPLACE — Controller
-// ====================================================================
 class Marketplace {
 private:
     const string PLATFORM_NAME;
@@ -1015,11 +975,6 @@ public:
     Admin*   findAdmin  (string n){ for(int i=0;i<numAdmins;  i++) if(admins[i].getUsername()==n)  return &admins[i];  return NULL; }
     Listing* findListing(int id)  { for(int i=0;i<numListings;i++) if(listings[i].getListingID()==id) return &listings[i]; return NULL; }
 };
-
-
-// ====================================================================
-// MAIN FUNCTION
-// ====================================================================
 int main()
 {
     cout<<"========================================"<<endl;
@@ -1120,9 +1075,7 @@ int main()
     market.buyerSendMsg("sara_buyer","ahmed_motors","Civic still under warranty?","2026-05-01");
     market.showBuyerMsgs("ali_buyer");
 
-    // ================================================================
     // SECTION 4: OPERATOR OVERLOADING DEMO
-    // ================================================================
     cout<<"\n========================================"<<endl;
     cout<<"  OPERATOR OVERLOADING DEMO"<<endl;
     cout<<"========================================"<<endl;
@@ -1177,9 +1130,7 @@ int main()
         cout<<"  lid1==lid3 (diff): "<<(*l1ptr==*l3ptr?"TRUE":"FALSE")<<endl;
     }
 
-    // ================================================================
     // SECTION 5: FRIEND FUNCTIONS DEMO
-    // ================================================================
     cout<<"\n========================================"<<endl;
     cout<<"  FRIEND FUNCTIONS DEMO"<<endl;
     cout<<"========================================"<<endl;
@@ -1212,9 +1163,7 @@ int main()
         cout<<"  Afford EV at 9.5M together? "<<(tot>=9500000?"Yes":"No")<<endl;
     }
 
-    // ================================================================
     // SECTION 3: ABSTRACTION DEMO — Interface pointers
-    // ================================================================
     cout<<"\n========================================"<<endl;
     cout<<"  ABSTRACTION DEMO (Interface Pointers)"<<endl;
     cout<<"========================================"<<endl;
@@ -1285,8 +1234,5 @@ int main()
     cout<<"Total users    : "<<User::getTotalUsers()<<endl;
     cout<<"Total listings : "<<Listing::getTotalListings()<<endl;
 
-    cout<<"\n========================================"<<endl;
-    cout<<"       Assignment 02 Complete!          "<<endl;
-    cout<<"========================================"<<endl;
     return 0;
 }
